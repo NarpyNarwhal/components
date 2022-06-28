@@ -43,6 +43,7 @@ import {
 } from './multi-year-view';
 import {MatYearView} from './year-view';
 import {MAT_SINGLE_DATE_SELECTION_MODEL_PROVIDER, DateRange} from './date-selection-model';
+import { ComparisonRange } from './date-range-input';
 
 /**
  * Possible views for the calendar.
@@ -254,6 +255,8 @@ export class MatCalendar<D> implements AfterContentInit, AfterViewChecked, OnDes
 
   /** End of the comparison range. */
   @Input() comparisonEnd: D | null;
+
+  @Input() comparisonList: Array<ComparisonRange<D>> | null;
 
   /** Emits when the currently selected date changes. */
   @Output() readonly selectedChange: EventEmitter<D | null> = new EventEmitter<D | null>();

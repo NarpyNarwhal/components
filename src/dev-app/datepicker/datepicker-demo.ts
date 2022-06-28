@@ -26,7 +26,8 @@ import {
   MatDatepickerInputEvent,
   MAT_DATE_RANGE_SELECTION_STRATEGY,
   MatDateRangeSelectionStrategy,
-  DateRange
+  DateRange,
+  ComparisonRange
 } from '@angular/material/datepicker';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
@@ -60,6 +61,7 @@ export class DatepickerDemo {
   range3 = new FormGroup({start: new FormControl(), end: new FormControl()});
   comparisonStart: Date;
   comparisonEnd: Date;
+  comparisonList: Array<ComparisonRange<Date>> = [];
 
   constructor() {
     const today = new Date();
@@ -67,6 +69,9 @@ export class DatepickerDemo {
     const month = today.getMonth();
     this.comparisonStart = new Date(year, month, 9);
     this.comparisonEnd = new Date(year, month, 13);
+    this.comparisonList.push({rangeStart: new Date(year, month, 1), rangeEnd: new Date(year, month, 2)});
+    this.comparisonList.push({rangeStart: new Date(year, month, 4), rangeEnd: new Date(year, month, 6)});
+    this.comparisonList.push({rangeStart: new Date(year, month, 9), rangeEnd: new Date(year, month, 15)});
   }
 
   dateFilter: (date: Date | null) => boolean =

@@ -266,6 +266,7 @@
       [disabled]="inputDisabled"
       [comparisonStart]="comparisonStart"
       [comparisonEnd]="comparisonEnd"
+      [comparisonList]="comparisonList"
       [dateFilter]="filterOdd ? dateFilter : undefined!">
       <input matStartDate formControlName="start" placeholder="Start date"/>
       <input matEndDate formControlName="end" placeholder="End date"/>
@@ -302,3 +303,5 @@
     </mat-date-range-picker>
   </mat-form-field>
 </div>
+
+<mat-calendar [comparisonList]="comparisonList"></mat-calendar>

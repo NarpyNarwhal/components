@@ -52,7 +52,7 @@ import {
   MatDateRangeSelectionStrategy,
   MAT_DATE_RANGE_SELECTION_STRATEGY,
 } from './date-range-selection-strategy';
-
+import { ComparisonRange } from './date-range-input';
 
 const DAYS_PER_WEEK = 7;
 
@@ -134,6 +134,8 @@ export class MatMonthView<D> implements AfterContentInit, OnChanges, OnDestroy {
   /** End of the comparison range. */
   @Input() comparisonEnd: D | null;
 
+  @Input() comparisonList: Array<ComparisonRange<D>> | null;
+
   /** Emits when a new date is selected. */
   @Output() readonly selectedChange: EventEmitter<D | null> = new EventEmitter<D | null>();
 
@@ -167,6 +169,9 @@ export class MatMonthView<D> implements AfterContentInit, OnChanges, OnDestroy {
 
   /** End value of the currently-shown comparison date range. */
   _comparisonRangeEnd: number | null;
+
+  /** List of comparison date ranges */
+  _comparisonRangeList: Array<ComparisonCellValue> | null;
 
   /** Start of the preview range. */
   _previewStart: number | null;
@@ -209,7 +214,7 @@ export class MatMonthView<D> implements AfterContentInit, OnChanges, OnDestroy {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    const comparisonChange = changes['comparisonStart'] || changes['comparisonEnd'];
+    const comparisonChange = changes['comparisonStart'] || changes['comparisonEnd'] || changes['comparisonList'];
 
     if (comparisonChange && !comparisonChange.firstChange) {
       this._setRanges(this.selected);
@@ -468,10 +473,25 @@ export class MatMonthView<D> implements AfterContentInit, OnChanges, OnDestroy {
 
     this._comparisonRangeStart = this._getCellCompareValue(this.comparisonStart);
     this._comparisonRangeEnd = this._getCellCompareValue(this.comparisonEnd);
+    if (this.comparisonList) {
+      let comparisonCellList;
+      if (this.comparisonList && this.comparisonList.length > 0) {
+        comparisonCellList = [] as Array<ComparisonCellValue>
+        for (const comparisonRange of this.comparisonList) {
+          comparisonCellList.push({comparisonCellStart: this._getCellCompareValue(comparisonRange.rangeStart), comparisonCellEnd: this._getCellCompareValue(comparisonRange.rangeEnd)});
+        }
+        this._comparisonRangeList = comparisonCellList;
+      }
+    }
   }
 
   /** Gets whether a date can be selected in the month view. */
   private _canSelect(date: D) {
     return !this.dateFilter || this.dateFilter(date);
   }
+}
+
+export class ComparisonCellValue {
+  comparisonCellStart: number | null;
+  comparisonCellEnd: number | null;
 }

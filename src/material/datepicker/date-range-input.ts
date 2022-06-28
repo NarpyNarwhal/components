@@ -24,7 +24,7 @@ import {
 } from '@angular/core';
 import {MatFormFieldControl, MatFormField, MAT_FORM_FIELD} from '@angular/material/form-field';
 import {ThemePalette, DateAdapter} from '@angular/material/core';
-import {NgControl, ControlContainer} from '@angular/forms';
+import {NgControl, ControlContainer, MinLengthValidator} from '@angular/forms';
 import {Subject, merge, Subscription} from 'rxjs';
 import {FocusOrigin} from '@angular/cdk/a11y';
 import {coerceBooleanProperty, BooleanInput} from '@angular/cdk/coercion';
@@ -220,6 +220,8 @@ export class MatDateRangeInput<D> implements MatFormFieldControl<DateRange<D>>,
   /** End of the comparison range that should be shown in the calendar. */
   @Input() comparisonEnd: D | null = null;
 
+  @Input() comparisonList: Array<ComparisonRange<D>> | null = null;
+
   @ContentChild(MatStartDate) _startInput: MatStartDate<D>;
   @ContentChild(MatEndDate) _endInput: MatEndDate<D>;
 
@@ -396,4 +398,9 @@ export class MatDateRangeInput<D> implements MatFormFieldControl<DateRange<D>>,
 
   static ngAcceptInputType_required: BooleanInput;
   static ngAcceptInputType_disabled: BooleanInput;
+}
+
+export interface ComparisonRange<D> {
+  rangeStart: D,
+  rangeEnd: D,
 }

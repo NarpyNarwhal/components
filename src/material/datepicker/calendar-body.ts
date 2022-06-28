@@ -20,6 +20,7 @@ import {
   OnDestroy,
 } from '@angular/core';
 import {take} from 'rxjs/operators';
+import { ComparisonCellValue } from './month-view';
 
 /** Extra CSS classes that can be associated with a calendar cell. */
 export type MatCalendarCellCssClasses = string | string[] | Set<string> | {[key: string]: any};
@@ -108,6 +109,8 @@ export class MatCalendarBody implements OnChanges, OnDestroy {
 
   /** End of the comparison range. */
   @Input() comparisonEnd: number | null;
+
+  @Input() comparisonList: Array<ComparisonCellValue> | null;
 
   /** Start of the preview range. */
   @Input() previewStart: number | null = null;
@@ -267,7 +270,17 @@ export class MatCalendarBody implements OnChanges, OnDestroy {
 
   /** Gets whether a value is within the current comparison range. */
   _isInComparisonRange(value: number) {
-    return isInRange(value, this.comparisonStart, this.comparisonEnd, this.isRange);
+    if (isInRange(value, this.comparisonStart, this.comparisonEnd, this.isRange)) {
+      return true;
+    }
+    if (this.comparisonList) {
+      for (const rangeCell of this.comparisonList) {
+        if (isInRange(value, rangeCell.comparisonCellStart, rangeCell.comparisonCellEnd, true)) {
+          return true
+        }
+      }
+    }
+    return false;
   }
 
   /**
